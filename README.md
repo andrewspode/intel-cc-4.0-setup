@@ -2,7 +2,7 @@
 
 A script that unpacks **Intel(R) C/C++ Compiler 4.0 (build 99100)** from the evaluation installer
 `compeval.exe`, on Linux/macOS/Windows, without running the InstallShield installer or needing Wine.
-This repository contains **no Intel software**; you supply the installer.
+This repository contains **no Intel software**; the script fetches the installer from archive.org (or uses your copy).
 
 ## Why this exists
 
@@ -35,9 +35,10 @@ material under `design/perftool/icl24/`.)
 Needs Python 3, `7z`/`7zz`/`7za` and [`unshield`](https://github.com/twogood/unshield) (>= 1.4;
 distro packages exist, or build it from source with a C compiler and zlib).
 
-    python3 setup_icl40.py compeval.exe icl40
+    python3 setup_icl40.py icl40              # downloads compeval.exe from archive.org, verifies its hash
+    python3 setup_icl40.py icl40 compeval.exe  # or use a copy you already have
 
-It checks the installer hash, extracts the embedded CAB, unpacks InstallShield's `data1.cab` (44 files:
+It downloads the installer if you did not pass one, checks its hash, extracts the embedded CAB, unpacks InstallShield's `data1.cab` (44 files:
 `icl.exe`, `mcpcom.exe`, `xilink.exe`, the SSE headers such as `xmmintrin.h`, `libm.lib`, ...) and
 prints the hashes of `icl.exe` and `mcpcom.exe`. The evaluation refuses to run after its 14 days (and,
 under wibo, without its registry key); `python3 patch_trial.py icl40` optionally writes `icl_notrial.exe`, a
