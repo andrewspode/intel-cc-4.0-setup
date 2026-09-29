@@ -39,7 +39,9 @@ distro packages exist, or build it from source with a C compiler and zlib).
 
 It checks the installer hash, extracts the embedded CAB, unpacks InstallShield's `data1.cab` (44 files:
 `icl.exe`, `mcpcom.exe`, `xilink.exe`, the SSE headers such as `xmmintrin.h`, `libm.lib`, ...) and
-prints the hashes of `icl.exe` and `mcpcom.exe`.
+prints the hashes of `icl.exe` and `mcpcom.exe`. The evaluation refuses to run after its 14 days (and,
+under wibo, without its registry key); `python3 patch_trial.py icl40` optionally writes `icl_notrial.exe`, a
+patched copy of the driver that skips that check (see NOTES.md).
 
 The compilers are Win32 console programs; they run under [wibo](https://github.com/decompals/wibo) or
 Wine. Example (from `Compiler_Bin_Files`): `wibo icl.exe -nologo -c -O2 -QxK -FAs -I../Compiler_Include_files file.c`.

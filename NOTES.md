@@ -14,3 +14,11 @@
 - `libm.lib` members: `floor.obu`, `ceil` and `modf.obu` have the same code as the helpers in the
   Indiana Jones executable, but the shipped `libm.lib` is a different build (different `.data` and a
   differently scheduled `modf`), so it is not a byte-exact source for them.
+
+## Trial check
+
+`patch_trial.py` (optional, run after `setup_icl40.py`) writes `icl_notrial.exe`, a copy of the driver
+whose trial-validity function (VA 0x0040B4D0, file offset 0xA8D0) returns 1 immediately. It verifies
+the hash of the input `icl.exe`, the six bytes it overwrites, and the hash of the result. The original
+`icl.exe` is not modified. Without the patch, the driver reports `trial registry error` (or
+`current time is not within the trial period`) and refuses to compile.
