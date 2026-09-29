@@ -46,6 +46,23 @@ patched copy of the driver that skips that check (see NOTES.md).
 The compilers are Win32 console programs; they run under [wibo](https://github.com/decompals/wibo) or
 Wine. Example (from `Compiler_Bin_Files`): `wibo icl.exe -nologo -c -O2 -QxK -FAs -I../Compiler_Include_files file.c`.
 
+## Using with wibo
+
+[wibo](https://github.com/decompals/wibo) is only the runner; nothing in the compiler needs to know
+about it. From `Compiler_Bin_Files`:
+
+    wibo icl_notrial.exe -nologo -c -O2 -QxK -FAs -I../Compiler_Include_files file.c
+
+- `icl.exe` finds `mcpcom.exe` and `xilink.exe` next to itself.
+- `-I../Compiler_Include_files` is required; the driver does not find its own headers (`xmmintrin.h`,
+  `mmintrin.h`, ...).
+- Use the patched `icl_notrial.exe`. The unpatched driver stops under wibo with `icl: error: trial
+  registry error` (the Intel registry key is missing; past the trial period it reports `current time is
+  not within the trial period`).
+- Tested so far: compile to object (`-c`) and assembly listing (`-FAs`), including SSE intrinsics with
+  `-QxK`. Linking through `xilink.exe` and `LIB` path handling are untested.
+- `mcpcom.exe` runs under wibo by itself but takes its options from the driver, so use `icl`.
+
 ## Licence and status
 
 The script is MIT-licensed. Intel C/C++ Compiler 4.0 remains Intel's proprietary software, licensed
